@@ -45,7 +45,7 @@ def get_restaurants():
     return jsonify(restaurants)
 
 @app.route("/api/restaurants", methods=["POST"])
-def add_restaurant():
+def create_restaurant():
     try:
         data = request.get_json()
         print("Incoming JSON:", data)
