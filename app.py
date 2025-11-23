@@ -13,6 +13,26 @@ db = client["restaurant_db"]
 restaurants_collection = db["restaurants"]
 expenses_collection = db["expenses"]
 
+@app.route("/api/restaurants", methods=["POST"])
+def add_restaurant():
+    print("Incoming JSON:", request.json)
+    try:
+        name = request.json.get("name")
+        location = request.json.get("location")
+        if not name or not location:
+            return jsonify({"error": "Missing name or location"}), 400
+
+        new_restaurant = {
+            "name": name,
+            "location": location
+        }
+        result = restaurants_collection.insert_one(new_restaurant)
+        new_restaurant["_id"] = str(result.inserted_id)
+        return jsonify(new_restaurant), 201
+    except Exception as e:
+        print("Error in POST /api/restaurants:", str(e))
+        return jsonify({"error": "Internal server error"}), 500
+
 # -------------------------------
 # 🧠 RESTAURANTS ROUTES
 # -------------------------------
