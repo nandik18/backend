@@ -46,11 +46,29 @@ def get_restaurants():
 
 @app.route("/api/restaurants", methods=["POST"])
 def add_restaurant():
-    data = request.json  # expects { name, location }
-    result = restaurants_collection.insert_one(data)
-    new_restaurant = restaurants_collection.find_one({"_id": result.inserted_id})
-    new_restaurant["_id"] = str(new_restaurant["_id"])
-    return jsonify(new_restaurant)
+    try:
+        data = request.get_json()
+        print("Incoming JSON:", data)
+
+        name = data.get("name")
+        location = data.get("location")
+
+        if not name or not location:
+            return jsonify({"error": "Missing name or location"}), 400
+
+        new_restaurant = {
+            "name": name,
+            "location": location
+        }
+
+        result = restaurants_collection.insert_one(new_restaurant)
+        new_restaurant["_id"] = str(result.inserted_id)
+
+        return jsonify(new_restaurant), 201
+
+    except Exception as e:
+        print("Error in POST /api/restaurants:", str(e))
+        return jsonify({"error": "Internal server error"}), 500
 
 @app.route("/api/restaurants/<id>", methods=["DELETE"])
 def delete_restaurant(id):
