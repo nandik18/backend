@@ -5,7 +5,7 @@ from bson import ObjectId
 import os
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, origins=["https://restaurantexpenses.netlify.app"])
 
 # 🔗 Connect to MongoDB
 client = MongoClient(os.getenv("MONGO_URI"))
