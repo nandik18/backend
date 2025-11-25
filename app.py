@@ -5,7 +5,16 @@ from bson import ObjectId
 import os
 
 app = Flask(__name__)
-CORS(app, origins=["https://frontend-hu04.onrender.com"])
+CORS(app, origins=[
+    "https://frontend-hu04.onrender.com",
+    "https://restaurantexpenses.netlify.app"
+], supports_credentials=True)
+
+@app.after_request
+def after_request(response):
+    response.headers.add("Access-Control-Allow-Headers", "Content-Type,Authorization")
+    response.headers.add("Access-Control-Allow-Methods", "GET,POST,DELETE,OPTIONS")
+    return response
 
 # 🔗 Connect to MongoDB
 client = MongoClient(os.getenv("MONGO_URI"))
