@@ -13,7 +13,7 @@ db = client["restaurant_db"]
 restaurants_collection = db["restaurants"]
 expenses_collection = db["expenses"]
 
-@app.route("/api/restaurants", methods=["POST"])
+@app.route("/api/restaurants/add", methods=["POST"])
 def add_restaurant():
     print("Incoming JSON:", request.json)
     try:
@@ -34,7 +34,7 @@ def add_restaurant():
         return jsonify({"error": "Internal server error"}), 500
 
 # -------------------------------
-# 🧠 RESTAURANTS ROUTES
+# 🧠 RESTAURANTS ROUTES 
 # -------------------------------
 
 @app.route("/api/restaurants", methods=["GET"])
