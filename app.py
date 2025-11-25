@@ -48,10 +48,15 @@ def add_restaurant():
 
 @app.route("/api/restaurants", methods=["GET"])
 def get_restaurants():
-    restaurants = list(restaurants_collection.find())
-    for r in restaurants:
-        r["_id"] = str(r["_id"])
-    return jsonify(restaurants)
+    try:
+        restaurants = list(restaurants_collection.find())
+        print("Fetched restaurants:", restaurants)  # Debug print
+        for r in restaurants:
+            r["_id"] = str(r["_id"])
+        return jsonify(restaurants)
+    except Exception as e:
+        print("Error in GET /api/restaurants:", str(e))  # Error log
+        return jsonify({"error": "Internal server error"}), 500
 
 @app.route("/api/restaurants", methods=["POST"])
 def create_restaurant():
